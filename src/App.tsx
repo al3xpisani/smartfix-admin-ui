@@ -1,23 +1,21 @@
-import React from "react";
+import { Box, createTheme } from "@mui/material";
 import "./App.css";
+import { ThemeProvider } from "@emotion/react";
+import { Header } from "./components/Header";
+import { Layout } from "./components/Layout";
+
+const defaultTheme = createTheme({});
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ThemeProvider theme={defaultTheme}>
+      <Box component="main" sx={{ height: "100vh", backgroundColor: "white" }}>
+        <Header />
+        <Layout>
+          <h1>olá mundo</h1>
+        </Layout>
+      </Box>
+    </ThemeProvider>
   );
 }
 
