@@ -1,4 +1,4 @@
-import { Box, Typography } from "@mui/material";
+import { Box } from "@mui/material";
 import { Routes, Route } from "react-router";
 import { ThemeProvider } from "@emotion/react";
 import { Header } from "./components/Header";
@@ -20,6 +20,8 @@ function App() {
             <Route path="/categories" element={<CategoryList />} />
             <Route path="/categories/create" element={<CategoryCreate />} />
             <Route path="/categories/edit/:id" element={<CategoryEdit />} />
+
+            <Route path="*" element={<Box>Page not found</Box>}></Route>
           </Routes>
         </Layout>
       </Box>
