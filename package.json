@@ -9,6 +9,7 @@
     "@hookform/resolvers": "^2.9.10",
     "@mui/icons-material": "^5.8.4",
     "@mui/material": "^5.9.3",
+    "@mui/x-data-grid": "^7.23.2",
     "@reduxjs/toolkit": "^2.5.0",
     "@testing-library/react": "^16.1.0",
     "@types/jest": "^29.5.14",

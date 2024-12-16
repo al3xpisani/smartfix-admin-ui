@@ -12,7 +12,7 @@ import CategoryCreate from "./features/category/CategoryCreate";
 function App() {
   return (
     <ThemeProvider theme={appTheme}>
-      <Box component="main" sx={{ height: "100vh", backgroundColor: "white" }}>
+      <Box component="main" sx={{ height: "100vh", backgroundColor: "black" }}>
         <Header />
         <Layout>
           <Routes>

@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { RootState } from "../../app/store";
 
 interface ICategory {
   id: string;
@@ -15,7 +16,7 @@ const category = {
   id: "cbdd550c-ad46-4e50-be8d-a8266aff4162",
   name: "PaleTurquoise",
   description: "Explicabo nemo voluptate aut nostrum impedit minus.",
-  is_active: true,
+  is_active: false,
   deleted_at: null,
   created_at: "2022-09-27T17:10:33+0000",
   updated_at: "2022-09-27T17:10:33+0000",
@@ -65,5 +66,7 @@ export const categorySlice = createSlice({
 
 export const { createCategory, updateCategory, deleteCategory } =
   categorySlice.actions;
+
+export const selectCategories = (state: RootState) => state.categories;
 
 export default categorySlice.reducer;

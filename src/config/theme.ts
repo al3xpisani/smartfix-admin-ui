@@ -7,7 +7,7 @@ export const appTheme = createTheme({
       main: "#f5f5f1",
     },
     secondary: {
-      main: "#e50914",
+      main: "#1284c3",
     },
     text: {
       primary: "#f5f5f1",

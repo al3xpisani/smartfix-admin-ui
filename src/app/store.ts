@@ -6,3 +6,4 @@ export const store = configureStore({
     categories: categoryReducer,
   },
 });
+export type RootState = ReturnType<typeof store.getState>;
