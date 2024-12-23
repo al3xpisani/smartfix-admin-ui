@@ -1,75 +1,38 @@
-import React from "react";
-import { Box, Button, IconButton, Typography } from "@mui/material";
-import DeleteIcon from "@mui/icons-material/Delete";
-import { useAppSelector } from "../../app/hooks";
-import { selectCategories } from "./categorySlice";
+import { Box, Button } from "@mui/material";
+import { useSnackbar } from "notistack";
+import { useEffect, useState } from "react";
 import { Link } from "react-router";
 import {
-  DataGrid,
-  GridColDef,
-  GridRenderCellParams,
-  GridRowsProp,
-  GridToolbar,
-} from "@mui/x-data-grid";
+  useDeleteCategoryMutation,
+  useGetCategoriesQuery,
+  useGetPaginationQuery,
+} from "../../api/apiSlice";
+import { CategoryTable } from "./components/CategoryTable";
 
 export default function CategoryList() {
-  const categories = useAppSelector(selectCategories);
-  const columns: GridColDef<(typeof rows)[number]>[] = [
-    {
-      field: "name",
-      headerName: "First name",
-      flex: 1,
-    },
-    {
-      field: "description",
-      headerName: "Description",
-      flex: 1,
-    },
-    {
-      field: "isActive",
-      headerName: "Active",
-      flex: 1,
-      type: "boolean",
-      renderCell: formatIsActiveCell,
-    },
-    {
-      field: "created_at",
-      headerName: "Created At",
-      flex: 1,
-    },
-    {
-      field: "id",
-      headerName: "Actions",
-      flex: 1,
-      renderCell: deleteItemCell,
-    },
-  ];
-  function deleteItemCell(rowData: GridRenderCellParams) {
-    return (
-      <IconButton
-        color="secondary"
-        onClick={() => console.log("deleted")}
-        aria-label="delete"
-      >
-        <DeleteIcon />
-      </IconButton>
-    );
-  }
-  function formatIsActiveCell(rowData: GridRenderCellParams) {
-    return (
-      <Typography color={rowData.value ? "primary" : "secondary"}>
-        {rowData.value ? "Active" : "Inactive"}
-      </Typography>
-    );
-  }
+  // const [page, setPage] = useState(1);
+  const [perPage, setPerPage] = useState(10);
+  const [rowsPerPage, setRowsPerPage] = useState([10, 20, 50, 100]);
+  // const [search, setSearch] = useState("");
+  const { data, isFetching } = useGetCategoriesQuery();
+  const { data: meta } = useGetPaginationQuery();
+  const [deleteCategory, deleteCategoryStatus] = useDeleteCategoryMutation();
+  const { enqueueSnackbar } = useSnackbar();
 
-  const rows: GridRowsProp = categories.map((category) => ({
-    id: category.id,
-    name: category.name,
-    description: category.description,
-    isActive: category.is_active,
-    created_at: new Date(category.created_at).toLocaleDateString("pt-BR"),
-  }));
+  async function handleDeleteCategory(id: string) {
+    await deleteCategory({ id });
+  }
+  // const handleFilterChange = (filterModel: GridFilterModel) => {};
+  // const handleOnChange = (page: number) => {};
+  // const handleOnPageSizeChange = (perPage: number) => {};
+
+  useEffect(() => {
+    if (deleteCategoryStatus.isSuccess) {
+      setPerPage(10);
+      setRowsPerPage([10, 20, 50, 100]);
+      enqueueSnackbar("Category deleted successfully", { variant: "success" });
+    }
+  }, [deleteCategoryStatus, enqueueSnackbar]);
   return (
     <Box maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
       <Box display={"flex"} justifyContent="flex-end">
@@ -84,31 +47,17 @@ export default function CategoryList() {
         </Button>
       </Box>
 
-      <Box sx={{ height: 400, width: "100%" }}>
-        <DataGrid
-          rows={rows}
-          columns={columns}
-          disableColumnFilter={true}
-          disableColumnSelector={true}
-          disableDensitySelector={true}
-          initialState={{
-            pagination: {
-              paginationModel: {
-                pageSize: 5,
-              },
-            },
-          }}
-          slots={{ toolbar: GridToolbar }}
-          slotProps={{
-            toolbar: {
-              showQuickFilter: true,
-              quickFilterProps: { debounceMs: 500 },
-            },
-          }}
-          pagination={true}
-          pageSizeOptions={[5, 10, 20, 50, 100]}
-          checkboxSelection
-          disableRowSelectionOnClick
+      <Box flex={1} height={600}>
+        <CategoryTable
+          data={data}
+          paginationData={meta}
+          handleDelete={handleDeleteCategory}
+          handleFilterChange={() => null}
+          handleOnChange={() => null}
+          handleOnPageSizeChange={() => null}
+          isFetching={isFetching}
+          perPage={perPage}
+          rowsPerPage={rowsPerPage}
         />
       </Box>
     </Box>
